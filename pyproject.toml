@@ -1,0 +1,23 @@
+[project]
+name = "abc"
+version = "0.1.0"
+description = "Approximate Bayesian Computation - Final Project"
+authors = [
+  {name = "Christian Mancini", email = "christian.mancini@unifi.it"},
+]
+requires-python = ">=3.14"
+readme = "README.md"
+license = "MIT"
+dependencies = [
+    "seaborn>=0.13.2",
+    "torch>=2.10.0",
+]
+
+[project.urls]
+Repository = "https://github.com/cMancio00/ABC.git"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.5",
+    "pyrefly>=0.55.0",
+]
