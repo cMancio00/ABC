@@ -27,3 +27,11 @@ The data stochastic generative model can be reproduced as follows:
 ![Simulator Algorithm](docs/figures/SimulatorAlgorithm.png)
 
 > **Proposal distributions should be consistent with the imposed constraints.**
+
+## ABC General Framework
+
+1. Sample parameters from prior distribution
+2. Generate data using the simulator
+3. Compute a summary statistic
+4. Compare the simulated summary statistic to the observed summary statistic
+5. Accept the parameters if the distance between the simulated and observed summary statistics is below a threshold.

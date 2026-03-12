@@ -1,3 +1,6 @@
+from abc import ABC, abstractmethod
+from typing import override
+
 from torch import Tensor
 from torch.distributions import Binomial, Bernoulli, MixtureSameFamily, Categorical
 import torch
@@ -43,31 +46,36 @@ class GenerativeProcess:
         probs = self.mixture.log_prob(domain).exp()
         return domain, probs
 
-    def generate(self, times: int = 100):
-        z = Bernoulli(self.rate).sample((times,))
-        y1 = Binomial(self.support, torch.tensor(self.theta1)).sample((times,))
-        y2 = Binomial(self.support, torch.tensor(self.theta2)).sample((times,))
+
+class Simulator(ABC):
+    @abstractmethod
+    def generate(self, *args, **kwargs) -> Tensor: ...
+
+    @abstractmethod
+    def propose_parameters(self, n_params: int = 100) -> tuple[Tensor, Tensor, Tensor]: ...
+
+
+class BinomialMixtureSimulator(Simulator):
+    @override
+    def generate(
+        self,
+        theta1: float,
+        theta2: float,
+        rate: float,
+        support: int = 4,
+        times: int = 100,
+    ):
+        z = Bernoulli(rate).sample((times,))
+        y1 = Binomial(support, torch.tensor(theta1)).sample((times,))
+        y2 = Binomial(support, torch.tensor(theta2)).sample((times,))
 
         y = torch.where(z == 1, y1, y2)
 
         return y
 
-
-x, p = GenerativeProcess(0.6,0.2, .7).density
-print(p.sum())
-
-plt.figure(figsize=(12,7))
-
-sns.barplot(
-    x=x.numpy(),
-    y=p.numpy(),
-    color="royalblue",
-    edgecolor="black",
-    label=r"$\lambda Bin(4,\theta_1) + (1-\lambda)Bin(4,\theta_2)$"
-)
-
-plt.xlabel(r"$x$")
-plt.ylabel(r"$P(X=x)$")
-
-plt.legend()
-plt.show()
+    @override
+    def propose_parameters(self, n_params: int = 100):
+        theta2 = torch.empty((n_params,)).uniform_()
+        theta1 = theta2 + (1 - theta2) * torch.rand((n_params,))
+        rate = torch.empty((n_params,)).uniform_()
+        return theta1, theta2, rate
