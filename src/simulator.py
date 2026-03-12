@@ -52,22 +52,24 @@ class Simulator(ABC):
     def generate(self, *args, **kwargs) -> Tensor: ...
 
     @abstractmethod
-    def propose_parameters(self, n_params: int = 100) -> tuple[Tensor, Tensor, Tensor]: ...
+    def propose_parameters(
+        self, n_params: int = 100
+    ) -> tuple[Tensor, Tensor, Tensor]: ...
 
 
 class BinomialMixtureSimulator(Simulator):
     @override
     def generate(
         self,
-        theta1: float,
-        theta2: float,
-        rate: float,
+        theta1: Tensor,
+        theta2: Tensor,
+        rate: Tensor,
         support: int = 4,
         times: int = 100,
     ):
         z = Bernoulli(rate).sample((times,))
-        y1 = Binomial(support, torch.tensor(theta1)).sample((times,))
-        y2 = Binomial(support, torch.tensor(theta2)).sample((times,))
+        y1 = Binomial(support, theta1).sample((times,))
+        y2 = Binomial(support, theta2).sample((times,))
 
         y = torch.where(z == 1, y1, y2)
 
