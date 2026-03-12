@@ -18,7 +18,7 @@ $$
 by assuming the following prior distributions:
 
 - $\lambda \sim U(0,1)$
-- $(\theta_1, \theta_2)$ uniformly distributed over the set $\{(\theta_1, \theta_2): 0 \le \theta_2 \le \theta_1 \le 0\}$
+- $(\theta_1, \theta_2)$ uniformly distributed over the set $\{(\theta_1, \theta_2): 0 \le \theta_2 \le \theta_1 \le 1\}$
 
 ## Simulator
 
