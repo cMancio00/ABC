@@ -10,26 +10,36 @@ readme = "README.md"
 license = "MIT"
 dependencies = [
     "click>=8.3.1",
-    "pyrefly>=0.55.0",
+    "ipykernel>=7.2.0",
+    "matplotlib>=3.10.8",
     "rich>=14.3.3",
+    "ruff>=0.15.5",
     "seaborn>=0.13.2",
-    "torch>=2.10.0",
+    "setuptools>=81.0.0",
+    "torch>=2.11.0",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch" }
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu129"
+explicit = true
 
 [project.urls]
 Repository = "https://github.com/cMancio00/ABC.git"
 
 [dependency-groups]
 dev = [
-    "ruff>=0.15.5",
-    "pyrefly>=0.55.0",
+    "ruff==0.15.10",
 ]
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
 
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 81.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
