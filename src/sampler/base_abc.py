@@ -1,7 +1,6 @@
 from typing import Literal
 
 import torch
-from rich.progress import track
 from torch import Tensor
 
 from simulator import Simulator
@@ -27,11 +26,7 @@ class BaseABC:
 
         theta1s, theta2s, rates = self.simulator.propose_parameters(n_iteration)
 
-        for theta1, theta2, rate in track(
-            zip(theta1s, theta2s, rates),
-            total=len(theta1s),
-            description="Basic ABC Sampling",
-        ):
+        for theta1, theta2, rate in zip(theta1s, theta2s, rates):
             sim = self.simulator.generate(
                 theta1=theta1, theta2=theta2, rate=rate, times=self.observations.size(0)
             )

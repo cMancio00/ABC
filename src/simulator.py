@@ -5,9 +5,6 @@ from torch import Tensor
 from torch.distributions import Binomial, Bernoulli, MixtureSameFamily, Categorical
 import torch
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-
 
 class GenerativeProcess:
     def __init__(self, theta1: float, theta2: float, rate: float, support: int = 4):
