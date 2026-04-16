@@ -8,13 +8,13 @@ import torch
 
 class GenerativeProcess:
     def __init__(self, theta1: float, theta2: float, rate: float, support: int = 4):
-        """
+        r"""
         A generative process for a mixture of two binomial distributions.
 
         The process follows the model:
         .. math::
 
-            \\lambda \\cdot Binomial(x_i | \\theta_1, N = 4) + (1 - \\lambda) \\cdot Binomial(x_i | \\theta_2, N = 4)
+            \lambda \cdot Binomial(x_i | \theta_1, N = 4) + (1 - \lambda) \cdot Binomial(x_i | \theta_2, N = 4)
 
         :param theta1: Probability of success for the first Binomial distribution.
         :param theta2: Probability of success for the second Binomial distribution.
