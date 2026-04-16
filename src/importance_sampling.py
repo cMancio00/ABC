@@ -11,6 +11,24 @@ from torch.distributions import Beta, Uniform, Distribution
 
 
 class ImportanceSampling(BaseABC):
+    r"""
+    Importance Sampling will weight each proposed parameters instead of only accepting some of them.
+
+    Given a prior :math:`p` and a proposal :math:`g` for a parameter :math:`\theta`, to get the unnormalized weight :math:`\tilde{w}_i` of a specific :math:`\theta_i \sim p`,
+    we calculate the following ratio:
+
+    .. math::
+
+        \frac{p(\theta_i)}{g(\theta_i)}
+
+    To get the normalized weight :math:`w_i` we simply calculate all the :math:`N` unnormalized weights and the total sum is the normalizing constant
+
+    .. math::
+
+        w_i = \frac{\tilde{w}_i}{\sum^N_{i=1 } w_i}
+
+    The parameters that would be discarded in the previous algorithm are now weighted and used to calculate the expectation.
+    """
     def __init__(
         self,
         observations: Tensor,
