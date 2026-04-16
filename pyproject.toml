@@ -5,7 +5,7 @@ description = "Approximate Bayesian Computation - Final Project"
 authors = [
   {name = "Christian Mancini", email = "christian.mancini@unifi.it"},
 ]
-requires-python = ">=3.14"
+requires-python = "==3.14.*"
 readme = "README.md"
 license = "MIT"
 dependencies = [
