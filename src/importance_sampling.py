@@ -7,7 +7,7 @@ from torch import Tensor
 from sampler.base_abc import BaseABC
 from simulator import Simulator
 from utils.statistics import calculate_frequency
-from torch.distributions import Beta, Uniform, Distribution
+from torch.distributions import Beta, Uniform
 
 
 class ImportanceSampling(BaseABC):
@@ -29,6 +29,7 @@ class ImportanceSampling(BaseABC):
 
     The parameters that would be discarded in the previous algorithm are now weighted and used to calculate the expectation.
     """
+
     def __init__(
         self,
         observations: Tensor,
@@ -37,20 +38,24 @@ class ImportanceSampling(BaseABC):
         threshold: float = 0.1,
     ):
         super().__init__(observations, simulator, summary_statistic, threshold)
-        self.theta_proposal = Beta(2,2)
-        self.rate_proposal = Beta(4,3)
+        self.theta_proposal = Beta(2, 2)
+        self.rate_proposal = Beta(4, 3)
 
     def plot_proposals(self):
         x = torch.linspace(0, 1, 1000)
         theta = torch.exp(self.theta_proposal.log_prob(x))
         rate = torch.exp(self.rate_proposal.log_prob(x))
 
-        fig, ax = plt.subplots(2, figsize=(12,10))
+        fig, ax = plt.subplots(2, figsize=(12, 10))
         ax[0].plot(x.numpy(), theta.numpy())
-        ax[0].set_title(f"Theta Proposal: Beta({self.theta_proposal.concentration1},{self.theta_proposal.concentration0})")
+        ax[0].set_title(
+            f"Theta Proposal: Beta({self.theta_proposal.concentration1},{self.theta_proposal.concentration0})"
+        )
 
         ax[1].plot(x.numpy(), rate.numpy())
-        ax[1].set_title(f"Rate Proposal: Beta({self.rate_proposal.concentration1},{self.rate_proposal.concentration0})")
+        ax[1].set_title(
+            f"Rate Proposal: Beta({self.rate_proposal.concentration1},{self.rate_proposal.concentration0})"
+        )
 
         plt.show()
 
@@ -58,7 +63,7 @@ class ImportanceSampling(BaseABC):
     def compute(self, n_samples: int = 1000) -> tuple[Tensor, Tensor, Tensor]:
 
         samples_theta1 = self.theta_proposal.sample((n_samples,))
-        samples_theta2 = self.theta_proposal.sample((n_samples,))* samples_theta1
+        samples_theta2 = self.theta_proposal.sample((n_samples,)) * samples_theta1
         samples_rate = self.rate_proposal.sample((n_samples,))
 
         importance_weights = []
