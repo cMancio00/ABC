@@ -82,8 +82,8 @@ class ImportanceSampling(BaseABC):
 
             prior_weights = (
                 Uniform(0, 1).log_prob(_rate)
-                * Uniform(0, 1).log_prob(_theta1)
-                * Uniform(0, 1).log_prob(_theta2)
+                + Uniform(0, 1).log_prob(_theta1)
+                + Uniform(0, 1).log_prob(_theta2)
             )
             proposal_weights = (
                 self.rate_proposal.log_prob(_rate)
@@ -101,8 +101,8 @@ class ImportanceSampling(BaseABC):
         normalized_weights = normalized_weights / normalized_weights.sum()
         normalized_weights.size()
 
-        expected_rate = (samples_rate * normalized_weights).sum()
-        expected_theta1 = (samples_theta1 * normalized_weights).sum()
-        expected_theta2 = (samples_theta2 * normalized_weights).sum()
+        # is_rate = (samples_rate * normalized_weights)
+        # is_theta1 = (samples_theta1 * normalized_weights)
+        # is_theta2 = (samples_theta2 * normalized_weights)
 
-        return expected_theta1, expected_theta2, expected_rate
+        return samples_theta1, samples_theta2, samples_rate, normalized_weights
